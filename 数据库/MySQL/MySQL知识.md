@@ -120,6 +120,7 @@ select * from table_name where name like "_浩_%"    # 三个字的 并且中间
 ```
 select * form table_name where date_key between '2019-10-10' and '2019-10-10';
 ```
+
 ### 外键
 ```
 create table tablename1(id int auto_increment primary key ,
@@ -164,11 +165,13 @@ show global variables like 'auto_inc%'; 查看全局变量
 set global auto_increment_increment=2; 设置会话步长
 # set global auto_increment_offset=10;
 ```
+
 ### SqlServer：自增步长
 
 #### 基于表级别
 
 ```
+
 CREATE TABLE `table1` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
 ) ENGINE=InnoDB AUTO_INCREMENT=3, 步长=2 DEFAULT CHARSET=utf8
