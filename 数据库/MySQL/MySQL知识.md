@@ -1,6 +1,6 @@
 # MySQL知识
 
-## 数据库相关SQL
+## 操作数据库相关SQL
 
 连接数据库：
 ```
@@ -22,13 +22,20 @@ show tables;
 ```
 create database db_name
 ```
+
+修改数据库：
+```
+aler db_name
+```
 删除数据库：
 ```
 drop database db_name
 ```
+
 ## 用户相关SQL
 
 ### 创建用户
+
 ```
 create user 'monkey’@'192.168.2.2’ identified by 'passwod’;
 # 创建名为 ‘monkey’ 密码为’password’ 登陆IP只能为：192.168.2.2 的用户
@@ -39,13 +46,16 @@ create user 'monkey’@'192.168.2.%' identified by 'password’;
 create user 'monkey’@'%' identified by 'password’;
 # 创建名为 ‘monkey’ 密码为’password’ 登陆IP不限的用户
 ```
+
 ### 创建表
+
 ```
 create table tablename(
                 id int auto_increment primary key,
                 name varchar(32),
                 age int
             )engine=innodb default charset=utf8;
+
 其中 语法：create table +tablename(
                      列名1 类型 其他,
                      列名2 类型 其他) engine = innodb default=charset=utf-8;
@@ -54,9 +64,17 @@ engine:指明数据库建表引擎为 innodb （支持事务操作）。
 myisam:不支持事务。
 default:charset=utf-8 指明数据表的编码字符集 为 utf-8。
 ```
+### 取别名 as
+select age as "年龄"，sex "性别"，username "姓名" from yytest as a;
+
+### 查看表的创建语句
+
+show create table table_name
 
 ### 在表中添加数据（三种）
+
 ```
+
 insert into tablename(name,age) values('monkey’,18);
              
 insert into tablename(name,age) values('JIAJIA’,18),('xiaoliu’,18);
@@ -65,6 +83,70 @@ insert into tablename(name,age) values('JIAJIA’,18),('xiaoliu’,18);
 insert into tablename(name,age) select name,age from tablename2;
 # 从别的表查找数据 写入
 
+```
+
+### 复制表
+
+```.bash
+# 仅复制表结构
+create table yytest2 like yytest;
+
+# 复制表结构和数据
+create table yytest3 as select  * from yytest;
+
+# 仅复制表的指定字段结构
+create table yytest4 as select id,uname,sex from yytest where 1<>1;
+
+# 复制表的指定字段结构和数据
+create table yytest5 as select id,uname,sex from yytest;
+
+# 查看表创建语句：没有包含主键和自增
+show create table yytest5;
+
+```
+
+### 修改表
+
+修改表名：alter table 旧表名 rename 新表名
+
+修改字段排列顺序： alert table 表名 modify 字段名 数据类型  [first/after,已存在的字段名]
+```.bash
+# 放在首位
+alter table yytest22 modify sex int(2) first;
+
+# 放在birth字段后面
+alter table yytest22 modify sex int(2) after birth;
+
+```
+
+修改字段数据类型：alter table 表名 modify 字段名 数据类型
+```.bash
+# 修改字段数据类型
+alter table yytest22 modify sex int(2);
+```
+
+修改字段名字： alter table 表名 change 旧字段 新字段 数据类型
+```.bash
+# 修改字段数据类型和字段名
+alter table yytest22 change sexs sex varchar(4);
+```
+
+添加字段 ：ALTER TABLE <表名> ADD <字段名> <数据类型>  [约束条件] [FIRST|AFTER 已存在的字段名];
+
+```.bash
+# 添加字段
+alter table yytest22 add  phone varchar(11);
+
+# 添加字段到首位
+alter table yytest22 add  phone varchar(11) not null default 2 first;
+
+# 添加字段到某个字段后面
+alter table yytest22 add  phone varchar(11) after sex;
+```
+删除字段：ALTER TABLE <表名> DROP <字段名>；
+```
+# 删除字段
+alter table yytest22 drop  phone;
 ```
 
 ### 删除表中数据不删除表（三种）
@@ -78,17 +160,30 @@ delete from tb1 where id > 10    # 跟条件
 ```
 drop table tablename;    # 删除表
 ```
+
 ### 修改数据
 ```
 update tablename set age=1024;
-update tablename set age=2048 where age=18;
+update tablename set age=2048,name=lisa where age=18;
 ```
+
 ### 查看数据
 ```
+desc tablename;查看表结构
 select * from tablename; # 查看表的所有行列
 select  name,age from tablename;    # 查看name和age 列
 ```
 ### 条件查询
+
+distinct 去重数据
+```
+distinct只能在select语句中使用且必须在所有字段前面
+
+如果有多个字段需要去重，则会对多个字段进行组合去重，即所有字段的数据重复才会被去重
+
+查看去重字段有多少种值  ：select count(distinct age) from yyTest; 
+```
+
 排序 order by
 ```
 select * form table_name order by id desc    # 从大到小
@@ -119,6 +214,37 @@ select * from table_name where name like "_浩_%"    # 三个字的 并且中间
 日期查询
 ```
 select * form table_name where date_key between '2019-10-10' and '2019-10-10';
+```
+判断为空值NULL
+is null是一个关键字来的，用于判断字段的值是否为空值（NULL）
+```
+select * from yyTest where sex is null;
+select * from yyTest where sex is not null;
+```
+between and 范围查询
+```
+BETWEEN 取值1 AND 取值2
+NOT BETWEEN 取值1 AND 取值2
+select * from yyTest where age between 19 and 21;
+select * from yyTest where age not between 19 and 21;
+```
+
+group by 分组查询
+```
+group by 关键字可以根据一个或多个字段对查询结果进行分组
+group by 一般都会结合Mysql聚合函数来使用
+如果需要指定条件来过滤分组后的结果集，需要结合 having 关键字；
+
+group by +聚合函数的栗子 （count(),sum(),max(),min(),avg()）
+# count统计条数
+select count(*) from yyTest group by department;
+
+group by+group_concat()栗子
+group_concat()可以将分组后每个组内的值都显示出来
+select department,group_concat(username) as "部门员工名字" from yyTest group by department;
+
+group by +having栗子
+select *,GROUP_CONCAT(username) from yyTest group by age having department = "seewo";
 ```
 
 ### 外键
@@ -152,6 +278,7 @@ alter table t10 AUTO_INCREMENT=10000;    # 设置自增的起始值
 alter table t10 AUTO_INCREMENT=10000;    # 设置自增的起始值
 ```
 ### MySQL: 自增步长
+
 #### 基于会话级别：
 ```
 show session variables like 'auto_inc%';    查看全局变量
@@ -221,11 +348,14 @@ t - table, c - column, v - value, o - operation( = , < , > , <=, >=)
 | 运算符  | 描述                                         |
 | ------- | -------------------------------------------- |
 | =       | 等于                                         |
-| <>      | 不等于。或（！=）                            |
+| <>  !=  | 不等于                                         |
 | >       | 大于                                         |
 | <       | 小于                                         |
-| \>=的   | 大于等于                                     |
-| \<=     | 小于等于                                     |
+| >=的   | 大于等于                                     |
+| <=     | 小于等于                                     |
+| and  && | 所有查询条件均满足才会被查询出来                 |
+| or  ||  | 满足任意一个查询条件就会被查询出来               |
+| xor      | 满足任意一个查询条件就会被查询出来               |
 | between | 在某个范围内                                 |
 | like    | 模糊查询,通配符 （%like, %like%, like%,...） |
 | in      | 指定针对某个列的多个可能值                   |
@@ -234,7 +364,7 @@ t - table, c - column, v - value, o - operation( = , < , > , <=, >=)
 
 | 通配符                   | 描述                       |
 | ------------------------ | -------------------------- |
-| %                        | 替代0个或多个字符          |
+| %                        | 替代0个或多个字符（任意长度的字符串）          |
 | _                        | 替代一个字符               |
 | [charlist]               | 字符列中的任何单一字符     |
 | [^charlist]或[!charlist] | 不在字符列中的任何单一字符 |
@@ -247,6 +377,10 @@ like '_ove' -- 将搜索以字母ove结尾的所有四个字母的名称（如 l
 like '[CK]ars[eo]n' -- 将搜索下列字符串： Carsen、Karson、Carson和Karson
 like '[A-Z]user' -- 将搜索以字符串user结尾、以从A-Z的任何单个字母开头的所有名称
 like 'M[^c]%' -- 将搜索以字母M开头，并且第二个字母不是c的所有名称（如MiPro）
+匹配的字符串必须加单引号或双引号 like "%test%" 
+默认情况下，like匹配的字符串是不区分大小写的； like "test1" 和 like "TEST1" 匹配的结果是一样的
+如果需要区分大小写，需要加入 binary 关键字
+select * from yyTest where username like binary "TEST_";
 ```
  
 
