@@ -48,7 +48,9 @@ input_search = driver.find_element_by_xpath("//input[starts-with(@id, 'k']") //�
 input_search = driver.find_element_by_xpath("//input[ends-with(@id, 'w']") //查找id以"w"结尾的元素
 input_search = driver.find_element_by_xpath("//input[matchs(@id, 'k*']") //利用正则表达式查找元素
 ```
+
 ### 6.通过css选择器选择元素
+
 ```bash
 driver.find_elements_by_css_selector("//div")
 driver.find_elements(By.CSS_SELECTOR,'//div')
@@ -89,6 +91,22 @@ el=driver.find_element_by_link_text("新闻")
 news = driver.find_element_by_link_text("新闻") //使用全部文本
 news = driver.find_element_by_partial_link_text("新") //使用部分文本
 ```
+
+## 获取元素标签文本
+
+```.bash
+# 获取第一个标签为a的文本
+a_text = driver.find_element_by_tag_name("a")
+print(a_text.text)
+
+```
+## 获取元素的属性值
+
+```.bash
+# 获取元素属性值
+a_attr = driver.find_element_by_class_name("mnav")
+print(a_attr.get_attribute("href"))
+```
 ## 表单元素操作
 
 ```bash
@@ -124,3 +142,13 @@ select_tag.select_by_value("0") #根据value里的值
 select_tag.select_by_visible_text("广播") #根据文本内容
 select_tag.deselect_all()  #取消所有的选中
  ```
+
+ ## 检查元素是否可见/可点击/被选中
+ 
+ ```.bash
+ ant_btn4 = driver.find_element_by_class_name("ant-btn4")
+ print("可见元素:", ant_btn4.is_displayed())
+ print("可点击元素:", ant_btn4.is_enabled())
+ print("已被选择元素:",ant_btn4.is_selected())
+ ```
+

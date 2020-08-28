@@ -1,3 +1,8 @@
+<!--
+ * @Descripttion: 
+ * @Author: zlj
+ * @Date: 2020-04-08 10:36:14
+-->
 # selenium使用
 
 ## 行为链
@@ -9,16 +14,17 @@ from selenium.webdriver import ActionChains
  submit_tag = driver.find_element_by_id('su')
 
 actions= ActionChains(driver)
-action.move_to_element(input_tag)  #移动元素
+action.move_to_element(input_tag).perform()  #移动元素
 action.send_keys_to_element(input_tag,'onion') 
 action.move_to_element(submit_tag)
 action.click(submit_tag)
 action.perform()
 
 
-click_and_hold(element) 点击但不松开鼠标
-context_click(element) 右键点击
-double_click(element)  双击 
+action.click_and_hold(element).perform() 点击但不松开鼠标
+action.context_click(element).perform() 右键点击
+action.double_click(element).perform()  双击 
+action.click_and_hold(login_btn).perform() 长按
 ```
 
 ### 将 ac1 拖拽到 ac2 位置
