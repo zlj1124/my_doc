@@ -121,7 +121,7 @@ input_tag.send_keys("onion")  #填充
 input_tag.clear()  #清除
 -----------
 remember_tag = driver.find_element_by_id('rememberME')
-remember_tag.click()  #点击 
+remember_tag.click()  #点击
 -------------------
 ```
 
