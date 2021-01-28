@@ -15,7 +15,7 @@ from selenium.webdriver import ActionChains
 
 actions= ActionChains(driver)
 action.move_to_element(input_tag).perform()  #移动元素
-action.send_keys_to_element(input_tag,'onion') 
+action.send_keys_to_element(input_tag,'onion')
 action.move_to_element(submit_tag)
 action.click(submit_tag)
 action.perform()
