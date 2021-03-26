@@ -51,7 +51,7 @@ Successfully installed django-1.11 pytz-2018.4
 在虚拟环境中使用Django模块来创建一个新的项目
 
 ```bash
-(venv) [root@localhost test]# python3 -m django startproject myProject
+(venv) [root@localhost test]# python3 -m django startproject myProject  或者django-admin startproject myproject
 (venv) [root@localhost test]# ls
 myProject  README.md  venv
 ```
@@ -198,13 +198,13 @@ myProject/
 │   └── wsgi.py
 └── stu
     ├── admin.py
-    ├── apps.py
+    ├── apps.py  #应用程序配置
     ├── __init__.py
-    ├── migrations
+    ├── migrations #数据迁移，记录models中数据变更
     │   └── __init__.py
-    ├── models.py
+    ├── models.py #模型文件
     ├── tests.py
-    └── views.py
+    └── views.py  #Django的视图文件
 
 4 directories, 17 files
 ```
@@ -234,6 +234,8 @@ from stu import views
 urlpatterns = [
     url(r'^test/', views.test)  # 添加应用中方法的路由
 ]
+
+
 # 项目中的urls.py
 (venv) [root@localhost myProject]# cat urls.py 
 from django.conf.urls import url, include
@@ -265,8 +267,9 @@ Successfully installed pymysql-0.8.0
 ```bash
 (venv) [root@localhost myProject]# cat __init__.py 
 import pymysql
-
 pymysql.install_as_MySQLdb()
+
+
 ```
 
 在数据库中创建一个新的空数据库

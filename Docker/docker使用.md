@@ -37,6 +37,7 @@ options:
 --digests:显示镜像的摘要信息
 --no-trunc:显示完整的镜像信息
 ```
+
 ![images](./img/images.png)
 
 ### 搜索镜像
